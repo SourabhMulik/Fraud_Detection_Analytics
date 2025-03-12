@@ -59,12 +59,12 @@ SELECT * FROM rolling_fraud WHERE fraud_rolling > 0;
 **Question**: Use multiple CTEs to identify accounts with suspicious activity, including large transfers, consecutive transactions without balance change, and flagged transactions
 
 ```sql
-WITH large_transfers as (
-SELECT nameOrig,step,amount FROM transactions WHERE type = 'TRANSFER' and amount >500000),
-no_balance_change as (
-SELECT nameOrig,step,oldbalanceOrg,newbalanceOrig FROM transactions where oldbalanceOrg=newbalanceOrig),
-flagged_transactions as (
-SELECT nameOrig,step FROM transactions where  isflaggedfraud = 1)
+WITH large_transfers AS (
+SELECT nameOrig,step,amount FROM transactions WHERE type = 'TRANSFER' AND amount >500000),
+no_balance_change AS (
+SELECT nameOrig,step,oldbalanceOrg,newbalanceOrig FROM transactions WHERE oldbalanceOrg=newbalanceOrig),
+flagged_transactions AS (
+SELECT nameOrig,step FROM transactions WHERE isflaggedfraud = 1)
 SELECT
     lt.nameOrig
 FROM
@@ -79,7 +79,7 @@ JOIN
 
 ```sql
 WITH CTE AS (
-SELECT amount, nameorig, oldbalancedest, newbalanceDest, (amount+oldbalancedest) as new_updated_Balance 
+SELECT amount, nameorig, oldbalancedest, newbalanceDest, (amount+oldbalancedest) AS new_updated_Balance 
 FROM transactions
 )
 SELECT * FROM CTE WHERE new_updated_Balance = newbalanceDest;
